@@ -1,18 +1,18 @@
 // utils/create-database.js
 // require the promise version of mysql2
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 
 // require path to handle file paths
-const path = require('path');
+const path = require("path");
 
 // extract any command line arguments from argv
 const args = process.argv.slice(2)[0];
 
 // use args to determine if .env or .env.test should be loaded
-const envFile = args === 'test' ? '../.env.test' : '../.env';
+const envFile = args === "test" ? "../.env.test" : "../.env";
 
 // load environment variables from env files
-require('dotenv').config({
+require("dotenv").config({
   path: path.join(__dirname, envFile),
 });
 
@@ -41,7 +41,7 @@ const setUpDatabase = async () => {
     console.log(
       `Your environment variables might be wrong. Please double check .env file`
     );
-    console.log('Environment Variables are:', {
+    console.log("Environment Variables are:", {
       DB_PASSWORD,
       DB_NAME,
       DB_USER,
