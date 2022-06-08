@@ -1,0 +1,35 @@
+{
+  "name": "book_library",
+  "version": "1.0.0",
+  "description": "BOOK LIBRARY API",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "node scripts/create-database.js test",
+    "test": "mocha tests/**/*.test.js",
+    "post-test": "node scripts/drop-database.js",
+    "prestart": "node scripts/create-database.js",
+    "start": "nodemon -r dotenv/config index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sgcook/book-library.git"
+  },
+  "author": "Sara Cook",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sgcook/book-library/issues"
+  },
+  "homepage": "https://github.com/sgcook/book-library#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.20.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.1",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.16",
+    "supertest": "^6.2.3"
+  }
+}
