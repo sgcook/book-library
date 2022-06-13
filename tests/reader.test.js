@@ -16,6 +16,7 @@ describe("/readers", () => {
         const {status, body} = await request(app).post("/readers").send({
           name: "Elizabeth Bennet",
           email: "future_ms_darcy@gmail.com",
+          password: "password"
         });
 
         const newReaderRecord = await Reader.findByPk(body.id, { raw: true });
@@ -36,14 +37,15 @@ describe("/readers", () => {
         Reader.create({
           name: "Elizabeth Bennet",
           email: "future_ms_darcy@gmail.com",
+          password: "password"
         }),
-        Reader.create({ name: "Arya Stark", email: "vmorgul@me.com" }),
-        Reader.create({ name: "Lyra Belacqua", email: "darknorth123@msn.org" }),
+        Reader.create({ name: "Arya Stark", email: "vmorgul@me.com", password: "password" }),
+        Reader.create({ name: "Lyra Belacqua", email: "darknorth123@msn.org", password: "password" }),
       ]);
     });
 
     describe("GET /readers", () => {
-      it("gets all readers records", async () => {
+      it("gets all readers' records", async () => {
         const {status, body} = await request(app).get("/readers");
 
         expect(status).to.equal(200);
@@ -59,7 +61,7 @@ describe("/readers", () => {
     });
 
     describe("GET /readers/:readerId", () => {
-      it("gets readers record by id", async () => {
+      it("gets reader's record by id", async () => {
         const reader = readers[0];
         const {status, body} = await request(app).get(`/readers/${reader.id}`);
 
@@ -76,7 +78,7 @@ describe("/readers", () => {
       });
     });
 
-    describe("PATCH /readers/:id", () => {
+    describe("PATCH /readers/:readerId", () => {
       it("updates readers email by id", async () => {
         const reader = readers[0];
         const {status} = await request(app)
@@ -101,7 +103,7 @@ describe("/readers", () => {
     });
 
     describe("DELETE /readers/:readerId", () => {
-      it("deletes reader record by id", async () => {
+      it("deletes reader's record by id", async () => {
         const reader = readers[0];
         const {status} = await request(app).delete(`/readers/${reader.id}`);
         const deletedReader = await Reader.findByPk(reader.id, { raw: true });
