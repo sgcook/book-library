@@ -1,8 +1,12 @@
 const { Reader } = require("../models");
 
 exports.create = async (req, res) => {
- const newReader = await Reader.create(req.body);
- res.status(201).json(newReader);
+  try {
+   const newReader = await Reader.create(req.body);
+   res.status(201).json(newReader);
+ } catch (error) {
+   res.status(400).json({error: error.errors.map(err => err.message)});
+ }
 }
 
 exports.readAll = async (req, res) => {
@@ -22,8 +26,7 @@ exports.readById = async (req, res) => {
 
 exports.update = async (req, res) => {
   const { readerId } = req.params;
-  const updateData = req.body;
-  const [ updatedRows ] = await Reader.update(updateData, {where:{ id: readerId } });
+  const updateData = req.body;    const [ updatedRows ] = await Reader.update(updateData, {where:{ id: readerId } });
   if(!updatedRows) {
     res.status(404).json({error: "The reader could not be found" });
   } else {

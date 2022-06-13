@@ -26,6 +26,15 @@ describe("/readers", () => {
         expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
         expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
       });
+
+      it("returns error messages if data is invalid", async () => {
+        const {status} = await request(app).post("/readers").send({
+          email: "future_ms_darcy@gmail.com",
+          password: "password"
+        });
+
+        expect(status).to.equal(400);
+      });
     });
   });
 

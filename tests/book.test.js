@@ -27,6 +27,16 @@ describe("/books", () => {
         expect(newBookRecord.title).to.equal("The Shadow of the Wind");
         expect(newBookRecord.genre).to.equal("Fiction");
       });
+
+      it("returns error messages if data is invalid", async () => {
+        const {status} = await request(app).post("/books").send({
+          author: "Carlos Ruiz Zafon",
+          genre: "Fiction",
+          ISBN: "9780753820254"
+        });
+
+        expect(status).to.equal(400);
+      })
     });
   });
 
