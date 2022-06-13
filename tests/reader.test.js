@@ -25,6 +25,7 @@ describe("/readers", () => {
         expect(body.name).to.equal("Elizabeth Bennet");
         expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
         expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
+        expect(body.password).to.equal(undefined);
       });
 
       it("returns error messages if data is invalid", async () => {
@@ -65,6 +66,7 @@ describe("/readers", () => {
 
           expect(reader.name).to.equal(expected.name);
           expect(reader.email).to.equal(expected.email);
+          expect(reader.password).to.equal(undefined);
         });
       });
     });
@@ -77,6 +79,7 @@ describe("/readers", () => {
         expect(status).to.equal(200);
         expect(body.name).to.equal(reader.name);
         expect(body.email).to.equal(reader.email);
+        expect(body.password).to.equal(undefined);
       });
 
       it("returns a 404 if the reader does not exist", async () => {
@@ -88,9 +91,9 @@ describe("/readers", () => {
     });
 
     describe("PATCH /readers/:readerId", () => {
-      it("updates readers email by id", async () => {
+      it("updates reader's email by id", async () => {
         const reader = readers[0];
-        const {status} = await request(app)
+        const {status, body} = await request(app)
           .patch(`/readers/${reader.id}`)
           .send({ email: "miss_e_bennet@gmail.com" });
         
@@ -100,6 +103,7 @@ describe("/readers", () => {
 
         expect(status).to.equal(200);
         expect(updatedReaderRecord.email).to.equal("miss_e_bennet@gmail.com");
+        expect(body.password).to.equal(undefined);
       });
 
       it("returns a 404 if the reader does not exist", async () => {

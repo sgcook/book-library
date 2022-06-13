@@ -1,13 +1,7 @@
 const { Book } = require("../models");
+const {createItem} = require("./helpers");
 
-exports.create = async (req, res) => {
-  try {
-    const newBook = await Book.create(req.body);
-    res.status(201).json(newBook);
-  } catch (error) {
-    res.status(400).json({error: error.errors.map(err => err.message)});
-  }
-}
+exports.create = (req, res) => createItem(res, "book", req.body);
 
 exports.readAll = async (req, res) => {
   const books = await Book.findAll({where: req.query});

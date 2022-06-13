@@ -1,36 +1,36 @@
 const { Reader } = require("../models");
+const { createItem, removePassword } = require("./helpers");
 
-exports.create = async (req, res) => {
-  try {
-   const newReader = await Reader.create(req.body);
-   res.status(201).json(newReader);
- } catch (error) {
-   res.status(400).json({error: error.errors.map(err => err.message)});
- }
-}
+exports.create = (req, res) => createItem(res, "reader", req.body);
 
 exports.readAll = async (req, res) => {
   const readers = await Reader.findAll({where: req.query});
-  res.status(200).json(readers);
+  const removedPasswordReaders = readers.map(reader => removePassword(reader.dataValues));
+  res.status(200).json(removedPasswordReaders);
 }
 
 exports.readById = async (req, res) => {
   const {readerId} = req.params;
   const reader = await Reader.findByPk(readerId);
+  
   if(!reader) {
     res.status(404).json({error: "The reader could not be found"});
   } else {
-    res.status(200).json(reader);
+    const removedPasswordReader = removePassword(reader.dataValues);
+    res.status(200).json(removedPasswordReader);
   }
 }
 
 exports.update = async (req, res) => {
   const { readerId } = req.params;
-  const updateData = req.body;    const [ updatedRows ] = await Reader.update(updateData, {where:{ id: readerId } });
+  const updateData = req.body;
+  const [ updatedRows ] = await Reader.update(updateData, {where:{ id: readerId } });
   if(!updatedRows) {
     res.status(404).json({error: "The reader could not be found" });
   } else {
-    res.status(200).send();
+    const updatedItem = await Reader.findByPk(readerId);
+    const passwordRemoved = removePassword(updatedItem.dataValues);
+    res.status(200).json(passwordRemoved);
   }
 }
 
