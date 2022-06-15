@@ -1,6 +1,6 @@
 const { Genre } = require("../models");
 const genre = require("../models/genre");
-const {createItem} = require("./helpers");
+const {createItem, getItemById} = require("./helpers");
 
 exports.create = (req, res) => createItem(res, "genre", req.body);
 
@@ -9,16 +9,17 @@ exports.readAll = async (req, res) => {
   res.status(200).json(genres);
 }
 
-exports.readById = async (req, res) => {
-  const {genreId} = req.params;
-  const genre = await Genre.findByPk(genreId);
+exports.readById = (req, res) => getItemById(res, "author", req.params.id);
+// {
+//   const {genreId} = req.params;
+//   const genre = await Genre.findByPk(genreId);
 
-  if(!genre) {
-    res.status(404).json({error: "The genre could not be found"});
-  } else {
-    res.status(200).json(genre);
-  }
-}
+//   if(!genre) {
+//     res.status(404).json({error: "The genre could not be found"});
+//   } else {
+//     res.status(200).json(genre);
+//   }
+// }
 
 exports.update = async (req, res) => {
   const {genreId} = req.params;

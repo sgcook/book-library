@@ -1,5 +1,5 @@
 const { Book } = require("../models");
-const {createItem} = require("./helpers");
+const {createItem, getItemById} = require("./helpers");
 
 exports.create = (req, res) => createItem(res, "book", req.body);
 
@@ -8,15 +8,16 @@ exports.readAll = async (req, res) => {
   res.status(200).json(books);
 }
 
-exports.readById = async (req, res) => {
-  const {bookId} = req.params;
-  const book = await Book.findByPk(bookId);
-  if(!book) {
-    res.status(404).json({error: "The book could not be found"});
-  } else {
-    res.status(200).json(book);
-  }
-}
+exports.readById = (req, res) => getItemById(res, "book", req.params.id);
+// {
+//   const {bookId} = req.params;
+//   const book = await Book.findByPk(bookId);
+//   if(!book) {
+//     res.status(404).json({error: "The book could not be found"});
+//   } else {
+//     res.status(200).json(book);
+//   }
+// }
 
 exports.update = async (req, res) => {
   const {bookId} = req.params;

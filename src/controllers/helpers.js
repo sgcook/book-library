@@ -7,9 +7,11 @@ const getModel = (model) => {
     genre: Genre,
     author: Author
   };
-
+  
   return models[model];
 }
+
+const get404Error = (model) => ({error: `The ${model} could not be found`});
 
 const removePassword = (obj) => {
   if(obj.hasOwnProperty("password")) {
@@ -29,4 +31,18 @@ const createItem = async (res, model, item) => {
   }
 }
 
-module.exports = {createItem, removePassword};
+const getItemById = (res, model, id) => {
+  const Model = getModel(model);
+
+  return Model.findByPk(id, {includes: Genre}).then((item) => {
+    if (!item) {
+      res.status(404).json(get404Error(model));
+    } else {
+      const itemWithoutPassword = removePassword(item.dataValues);
+      res.status(200).json(itemWithoutPassword);
+    }
+  });
+};
+
+
+module.exports = {createItem, removePassword, getItemById};
