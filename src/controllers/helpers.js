@@ -1,3 +1,5 @@
+const req = require("express/lib/request");
+const res = require("express/lib/response");
 const { Book, Reader, Genre, Author } = require("../models");
 
 const get404Error = (model) => ({error: `The ${model} could not be found`});
@@ -37,6 +39,20 @@ const createItem = async (res, model, item) => {
   }
 }
 
+const getAllItems = async (res, model) => {
+  const Model = getModel(model);
+
+  const options = getOptions(model);
+
+  const items = await Model.findAll({...options});
+
+  const itemsWithoutPassword = items.map((item) => {
+    return removePassword(item.dataValues);
+  });
+
+  res.status(200).json(itemsWithoutPassword);
+}
+
 const getItemById = async (res, model, id) => {
   const Model = getModel(model);
 
@@ -52,5 +68,30 @@ const getItemById = async (res, model, id) => {
   }
 };
 
+const updateItem = async (res, model, item, id) => {
+  const Model = getModel(model);
 
-module.exports = {createItem, removePassword, getItemById};
+  const [ updatedRows ] = await Model.update(item, {where: {id: id}});
+
+  if(!updatedRows) {
+    res.status(404).json(get404Error(model));
+  } else {
+    const updatedItem = await Model.findByPk(id);
+    const itemWithoutPassword = removePassword(updatedItem.dataValues);
+    res.status(200).json(itemWithoutPassword);
+  }
+}
+
+const deleteItem = async (res, model, id) => {
+  const Model = getModel(model);
+  const deletedRows = await Model.destroy({ where: {id: id }});
+
+  if(deletedRows) {
+    res.status(204).send();
+  } else {
+    res.status(404).send(get404Error(model));
+  }
+}
+
+
+module.exports = {createItem, removePassword, getAllItems,getItemById, updateItem, deleteItem};
