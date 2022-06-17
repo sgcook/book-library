@@ -9,17 +9,7 @@ exports.readAll = async (req, res) => {
   res.status(200).json(genres);
 }
 
-exports.readById = (req, res) => getItemById(res, "author", req.params.id);
-// {
-//   const {genreId} = req.params;
-//   const genre = await Genre.findByPk(genreId);
-
-//   if(!genre) {
-//     res.status(404).json({error: "The genre could not be found"});
-//   } else {
-//     res.status(200).json(genre);
-//   }
-// }
+exports.readById = (req, res) => getItemById(res, "genre", req.params.genreId);
 
 exports.update = async (req, res) => {
   const {genreId} = req.params;

@@ -16,7 +16,6 @@ describe("/books", () => {
         const {status, body} = await request(app).post("/books").send({
           title: "The Shadow of the Wind",
           author: "Carlos Ruiz Zafon",
-          genre: "Fiction",
           ISBN: "9780753820254"
         });
 
@@ -25,13 +24,11 @@ describe("/books", () => {
         expect(status).to.equal(201);
         expect(body.title).to.equal("The Shadow of the Wind");
         expect(newBookRecord.title).to.equal("The Shadow of the Wind");
-        expect(newBookRecord.genre).to.equal("Fiction");
       });
 
       it("returns error messages if data is invalid", async () => {
         const {status} = await request(app).post("/books").send({
           author: "Carlos Ruiz Zafon",
-          genre: "Fiction",
           ISBN: "9780753820254"
         });
 
@@ -48,19 +45,16 @@ describe("/books", () => {
         Book.create({
           title: "The Shadow of the Wind",
           author: "Carlos Ruiz Zafon",
-          genre: "Fiction",
           ISBN: "9780753820254"
         }),
         Book.create({
           title: "Cracking the Coding Interview",
           author: "Gayle Laakmann McDowell",
-          genre: "Career Guides",
           ISBN: "0984782869"
         }),
         Book.create({
           title: "No Matter the Wreckage",
           author: "Sarah Kay",
-          genre: "Poetry",
           ISBN: "1938912489"
         })
       ]);

@@ -9,18 +9,7 @@ exports.readAll = async (req, res) => {
   res.status(200).json(removedPasswordReaders);
 }
 
-exports.readById = (req, res) => getItemById(res, "author", req.params.id);
-// {
-//   const {readerId} = req.params;
-//   const reader = await Reader.findByPk(readerId);
-  
-//   if(!reader) {
-//     res.status(404).json({error: "The reader could not be found"});
-//   } else {
-//     const removedPasswordReader = removePassword(reader.dataValues);
-//     res.status(200).json(removedPasswordReader);
-//   }
-// }
+exports.readById = (req, res) =>  getItemById(res, "reader", req.params.readerId);
 
 exports.update = async (req, res) => {
   const { readerId } = req.params;

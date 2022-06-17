@@ -28,13 +28,40 @@ describe("/readers", () => {
         expect(body.password).to.equal(undefined);
       });
 
-      it("returns error messages if data is invalid", async () => {
-        const {status} = await request(app).post("/readers").send({
-          email: "future_ms_darcy@gmail.com",
-          password: "password"
+      it("errors if an email or password are in the wrong format", async () => {
+        const {status, body} = await request(app).post("/readers").send({
+          name: "Elizabeth Bennet",
+          email: "future_ms_darcygmail.com",
+          password: "123",
         });
+        const newReaderRecord = await Reader.findByPk(body.id, { raw: true, });
 
         expect(status).to.equal(400);
+        expect(body.errors.length).to.equal(2);
+        expect(newReaderRecord).to.equal(null);
+      });
+
+      it("errors if any of the fields are missing", async () => {
+        const {status, body} = await request(app).post("/readers").send({});
+        const newReaderRecord = await Reader.findByPk(body.id, {raw: true});
+
+        expect(status).to.equal(400);
+        expect(body.errors.length).to.equal(3);
+        expect(newReaderRecord).to.equal(null);
+      })
+
+      it("errors if name is an empty string", async () => {
+        const {status, body} = await request(app).post("/readers").send({
+          name: "",
+          password: "password",
+          email: "email@domain.com",
+        });
+
+        const newReaderRecord = await Reader.findByPk(body.id, {raw: true});
+        
+        expect(status).to.equal(400);
+        expect(body.errors.length).to.equal(1);
+        expect(newReaderRecord).to.equal(null);
       });
     });
   });
